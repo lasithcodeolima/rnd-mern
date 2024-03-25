@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router";
 
@@ -17,7 +17,11 @@ function UseStateHook() {
     setCount(count - 1);
   };
 
-  const Navigate =useNavigate();
+  useEffect(() => {
+    console.log(`New Count is: ${count}`);
+  }, [count]);
+
+  const Navigate = useNavigate();
 
   return (
     <div>
@@ -29,10 +33,12 @@ function UseStateHook() {
       <Button onClick={increment} variant="primary">
         +
       </Button>
-      <br/>
-      <Button onClick={()=>Navigate(-1)} variant="warning">Back</Button>
+      <br />
+      <Button onClick={() => Navigate(-1)} variant="warning">
+        Back
+      </Button>
     </div>
   );
-};
+}
 
 export default UseStateHook;
