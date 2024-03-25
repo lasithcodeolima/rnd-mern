@@ -5,6 +5,7 @@ import Content from "./Components/Content";
 import Home from "./Components/Home";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AboutUs from "./Components/AboutUs";
+import UseStateHook from "./Components/UseStateHook";
 
 function App() {
   const appName = "Codeolima Web App";
@@ -25,13 +26,14 @@ function App() {
             element={
               <Home projName="rnd-mern" org="Codeolima">
                 {/*children props*/} <p>this is the web application.</p>
-                <br />
+                <br/>
                 <p>Welocome to Codeolima.</p>
               </Home>
             }
           ></Route>
 
           <Route path="/AboutUs" element={<AboutUs/>}></Route>
+          <Route path="/UseStateHook" element={<UseStateHook/>}></Route>
         </Routes>
       </BrowserRouter>
     </div>
