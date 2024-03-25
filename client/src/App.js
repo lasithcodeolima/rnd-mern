@@ -5,13 +5,14 @@ import Footer from './Components/Footer';
 import Content from './Components/Content';
 
 function App() {
-  const appName= 'codeolima'
-  const version = '1.0.0'
+  const appName = "Codeolima Web App";
+  const version = process.env.REACT_APP_VERSION;
+
   return (
-    <div className="App">
-      <Header/>
+    <div>
+      <Header appName={appName}/>
       <Content/>
-      <Footer/>
+      <Footer version={version}/>
     </div>
   );
 }

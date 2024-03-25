@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function Header() {
-  return (
-    <div>
-      App Name
-    </div>
-  )
+export default class Header extends Component {
+  render() {
+    return (
+      <div>App Name : {this.props.appName}</div>
+    )
+  }
 }
