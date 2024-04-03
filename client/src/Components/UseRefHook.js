@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
 
-function App() {
+function UseRefHook() {
   const [inputValue, setInputValue] = useState("");
   const count = useRef(0);
 
@@ -22,4 +22,6 @@ function App() {
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
+root.render(<UseRefHook />);
+
+export default UseRefHook;

@@ -8,6 +8,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AboutUs from "./Components/AboutUs";
 import UseStateHook from "./Components/UseStateHook";
 import LifeCycleHook from "./LifeCycle/LifeCycleHook";
+import UseRefHook from "./Components/UseRefHook";
 
 class App extends Component {
   state = { value: 1 };
@@ -33,6 +34,7 @@ class App extends Component {
             <Route path="/AboutUs" element={<AboutUs/>}></Route>
             <Route path="/UseStateHook" element={<UseStateHook/>}></Route>
             <Route path="/LifeCycleHook" element={<LifeCycleHook/>}></Route>
+            <Route path="/UseRefHook" element={<UseRefHook/>}></Route>
           </Routes>
         </BrowserRouter>
       </div>
