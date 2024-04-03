@@ -8,8 +8,7 @@ var Products = require('../models/products')
 // List Products 
 router.get('/', async (req, res, next) => {
 
-    const products = DUMMY_PRODUCT_LIST
-    return res.status(200).json(products)
+
     try{
         const productList = await Products.find({}).exec()
         return res.status(200).json(productList)
@@ -20,24 +19,67 @@ router.get('/', async (req, res, next) => {
 });
 
 // Create Product
-router.post('/', function(req, res, next) {
+router.post('/', async (req, res, next) => {
 
     try{
         const { name, price } = req.body;
-        if(name && price){
-            const newProduct = { name: body.name, price : body.price }
-            // Start : Should replace by Actual DB Query
-            const finalobj = { _id : uuidv4(), ...newProduct}
-            DUMMY_PRODUCT_LIST.push(finalobj)
-            const product =  finalobj;
-            // End
-            // TODO : if product already exsist in db should return 409 
-            return res.status(200).json(product)
+        if(name && price && !isNaN(price)){
+            const newProduct = new Products({ name, price })
+            await newProduct.save()
+
+            
+            return res.status(400).json
+        }
+
+    }catch(err){
+        return res.status(500).json()
+    }
+
+});
+
+// Product Update by Id 
+router.put('/:id', async (req, res, next) => {
+
+    try{
+        const id = req.params.id
+        const { name, price } = req.body;
+        if(name && price && !isNaN(price)){
+            const product = await Products.findOne({_id : id }).exec() 
+            if(product){
+                const updateProduct = await Products.findOneAndUpdate({ _id: id }, { name, price }, { new: true } )
+                
+                return res.status(200).json(updateProduct)
+            }else{
+                return res.status(404).json()
+            }
         }else{
             return res.status(400).json()
         }
     }catch(err){
-        return res.status(500).json(err)
+        return res.status(500).json()
     }
 
 });
+
+
+// Delete Product by Id
+router.delete('/:id', async (req, res, next) => {
+
+    try{
+        const id = req.params.id;
+
+        const product = await Products.findOne({_id : _id }).exec() 
+        if(product){
+            await Products.deleteOne({ _id : product._id })
+            return res.status(200).json()
+        }else{
+            return res.status(404).json()
+        }
+    }catch(err){
+        return res.status(500).json()
+    }
+});
+
+
+
+module.exports = router;
