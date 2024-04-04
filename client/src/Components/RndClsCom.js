@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import Product from './Product';
 
 export default class RndClsCom extends Component {
 
     constructor(props) { 
-        super(props); 
-        // Initializing the state  
+        super(props);   
         this.state = { isLoading: true, products: [] }; 
       } 
 
@@ -25,7 +25,7 @@ export default class RndClsCom extends Component {
             });
           })
           .finally(() => {
-            // always executed
+            
           });
     }
 
@@ -35,8 +35,7 @@ export default class RndClsCom extends Component {
       <>        
         {this.state.isLoading ? 
             <div>Loading ....</div> : 
-            <div>{this.state.products.map((item) => <div key={item._id}>Name : {item.name}, Price: {item.price}</div> )}</div>
-        }        
+            <div>{this.state.products.map((item) => <Product key={item._id} name={item.name} price={item.price} /> )}</div>}        
       </>
     )
   }
