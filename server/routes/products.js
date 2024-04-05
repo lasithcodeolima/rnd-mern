@@ -1,6 +1,6 @@
 var express = require('express');
-const { v4: uuidv4 } = require('uuid');
-const { DUMMY_PRODUCT_LIST } = require('../dummy/dummy-products');
+
+
 var router = express.Router();
 var Products = require('../models/products')
 
@@ -18,17 +18,36 @@ router.get('/', async (req, res, next) => {
 
 });
 
+const validateRequestPayload = (reqPayload = {}, validationConfig = []) => {
+
+    const isError = [];
+    const vConfigLength =  validationConfig.length;
+    for(let i  = 0; i < vConfigLength; i++){
+        const key = validationConfig[i]
+        const isKeyFound = reqPayload[key];
+        if(!isKeyFound){
+            isError.push({
+                key, 
+                error: `${key} is Required`
+            })
+        }
+    }
+    return isError;
+}
+
 // Create Product
 router.post('/', async (req, res, next) => {
 
     try{
         const { name, price } = req.body;
-        if(name && price && !isNaN(price)){
+        const validationConfig = ["name", "price"];
+        const isError = validateRequestPayload(req.body, validationConfig)
+        if(!isError.length){
             const newProduct = new Products({ name, price })
             await newProduct.save()
 
             
-            return res.status(400).json
+            return res.status(400).json(isError)
         }
 
     }catch(err){
