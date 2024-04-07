@@ -1,8 +1,7 @@
 var express = require('express');
-
-
 var router = express.Router();
 var Products = require('../models/products')
+var {validateRequestPayload} = require('../util/validateRequestPayload')
 
 
 // List Products 
@@ -18,34 +17,35 @@ router.get('/', async (req, res, next) => {
 
 });
 
-const validateRequestPayload = (reqPayload = {}, validationConfig = []) => {
-
-    const isError = [];
-    const vConfigLength =  validationConfig.length;
-    for(let i  = 0; i < vConfigLength; i++){
-        const key = validationConfig[i]
-        const isKeyFound = reqPayload[key];
-        if(!isKeyFound){
-            isError.push({
-                key, 
-                error: `${key} is Required`
-            })
+router.get('/:id', async (req, res, next) => {
+    
+    try{
+        const _id = req.params.id;
+        const product = await Products.findOne({_id : _id }).exec()        
+        if(product){
+            return res.status(200).json(product)
+        }else{
+            return res.status(404).json()
         }
+    }catch(err){
+        return res.status(500).json()
     }
-    return isError;
-}
+
+});
+
+const validationConfigCreateObj = [
+    { key: "name", type: "string", isRequired: true },
+    { key: "price", type: "number", isRequired: true }
+ ];
 
 // Create Product
 router.post('/', async (req, res, next) => {
 
     try{
-        const { name, price } = req.body;
-        const validationConfig = ["name", "price"];
-        const isError = validateRequestPayload(req.body, validationConfig)
+        const isError = validateRequestPayload(req.body, validationConfigCreateObj)
         if(!isError.length){
-            const newProduct = new Products({ name, price })
+            const newProduct = new Products(req.body)
             await newProduct.save()
-
             
             return res.status(400).json(isError)
         }
@@ -57,22 +57,26 @@ router.post('/', async (req, res, next) => {
 });
 
 // Product Update by Id 
+
+const validationConfigUpdateObj = [
+    { key: "name", type: "string", isRequired: false },
+    { key: "price", type: "number", isRequired: false }
+ ];
 router.put('/:id', async (req, res, next) => {
 
     try{
         const id = req.params.id
-        const { name, price } = req.body;
-        if(name && price && !isNaN(price)){
+        const isError = validateRequestPayload(req.body, validationConfigUpdateObj)
+        if(!isError.length){
             const product = await Products.findOne({_id : id }).exec() 
             if(product){
-                const updateProduct = await Products.findOneAndUpdate({ _id: id }, { name, price }, { new: true } )
-                
+                const updateProduct = await Products.findOneAndUpdate({ _id: id }, req.body, { new: true } )
                 return res.status(200).json(updateProduct)
             }else{
                 return res.status(404).json()
             }
         }else{
-            return res.status(400).json()
+            return res.status(400).json(isError)
         }
     }catch(err){
         return res.status(500).json()
@@ -87,7 +91,7 @@ router.delete('/:id', async (req, res, next) => {
     try{
         const id = req.params.id;
 
-        const product = await Products.findOne({_id : _id }).exec() 
+        const product = await Products.findOne({_id : id }).exec() 
         if(product){
             await Products.deleteOne({ _id : product._id })
             return res.status(200).json()
