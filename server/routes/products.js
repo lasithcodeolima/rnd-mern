@@ -47,10 +47,10 @@ router.post('/', async (req, res, next) => {
         if(!isError.length){
             const newProduct = new Products(req.body)
             await newProduct.save()
-            
+            return res.status(200).json(newProduct)
+        }else{
             return res.status(400).json(isError)
         }
-
     }catch(err){
         return res.status(500).json()
     }

@@ -7,7 +7,8 @@ import { fetchProducts } from '../Services/apiService';
 export default class RndClsCom extends Component {
 
     constructor(props) { 
-        super(props);   
+        super(props); 
+   
         this.state = { isLoading: true, products: [] }; 
       } 
 
@@ -27,7 +28,7 @@ export default class RndClsCom extends Component {
             });
           })
           .finally(() => {
-            
+            // always executed
           });
     }
 
@@ -37,7 +38,8 @@ export default class RndClsCom extends Component {
       <>        
         {this.state.isLoading ? 
             <Loading /> : 
-            <div>{this.state.products.map((item) => <Product key={item._id} name={item.name} price={item.price} /> )}</div>}        
+            <div>{this.state.products.map((item) => <Product key={item._id} name={item.name} price={item.price} /> )}</div>
+        }        
       </>
     )
   }

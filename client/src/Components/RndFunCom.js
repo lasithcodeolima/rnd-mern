@@ -24,8 +24,8 @@ const RndFunCom =  () => {
           });
     }, [])
 
-    return (
-        <>
+  return (
+    <>
     {isLoading ? 
             <Loading /> : 
             <div>{products.map((item) => <Product key={item._id} name={item.name} price={item.price} /> )}</div>
@@ -33,4 +33,5 @@ const RndFunCom =  () => {
     </>
   )
 }
+
 export default RndFunCom
