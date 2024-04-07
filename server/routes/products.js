@@ -65,7 +65,6 @@ const validationConfigUpdateObj = [
     { key: "desc", type: "string", isRequired: false }
  ];
 router.put('/:id', async (req, res, next) => {
-
     try{
         const id = req.params.id
         const isError = validateRequestPayload(req.body, validationConfigUpdateObj)
