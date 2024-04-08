@@ -2,14 +2,21 @@ var express = require('express');
 var router = express.Router();
 var Products = require('../models/products')
 var {validateRequestPayload} = require('../util/validateRequestPayload')
-
+//const paginate = require('express-paginate');
+//router.use(paginate.middleware(5, 10));
 
 // List Products 
 router.get('/', async (req, res, next) => {
 
-    const { page = 1, limit = 10 } = req.query
-    try{
-        const productList = await Products.find({}).skip((page - 1) * limit).limit(limit).sort({_id : -1 }).exec()
+    //const { page = 1, limit = 5 } = req.query
+    const page =req.query.p || 0
+    const pageLimit =  6
+    
+    try{ 
+        
+        const productList = await Products.find({}).skip(page  * pageLimit).limit(pageLimit).sort({_id : -1 }).exec()
+        
+        
         return res.status(200).json(productList)
     }catch(e){
         res.status(500).json()
@@ -32,6 +39,7 @@ router.get('/:id', async (req, res, next) => {
     }
 
 });
+
 
 const validationConfigCreateObj = [
     { key: "name", type: "string", isRequired: true },
